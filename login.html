@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | Instinct Edu</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #1a1a1b;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .registro-card {
+            background: #242424;
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #333;
+        }
+
+        .logo {
+            font-size: 24px;
+            color: #ff4757;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a1b;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #ff4757;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        #campoAsignatura {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="registro-card">
+    <div class="logo">Instinct Edu</div>
+
+    <form id="formRegistro">
+        <div class="form-group">
+            <input type="text" id="regNombre" placeholder="Nombre completo" required>
+        </div>
+
+        <div class="form-group">
+            <select id="regRol">
+                <option value="estudiante">Estudiante</option>
+                <option value="maestro">Maestro</option>
+            </select>
+        </div>
+
+        <div id="campoAsignatura" class="form-group">
+            <input type="text" id="regMateria" placeholder="Asignatura">
+        </div>
+
+        <div class="form-group">
+            <input type="password" id="regPass" placeholder="Contraseña" required>
+        </div>
+
+        <button type="submit">Registrarse</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('regRol').addEventListener('change', function() {
+    const campo = document.getElementById('campoAsignatura');
+    campo.style.display = (this.value === "maestro") ? "block" : "none";
+
+    if (this.value !== "maestro") {
+        document.getElementById('regMateria').value = "";
+    }
+});
+
+document.getElementById('formRegistro').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const rol = document.getElementById('regRol').value;
+    const materia = document.getElementById('regMateria').value;
+    const pass = document.getElementById('regPass').value;
+
+    if (rol === "maestro" && materia.trim() === "") {
+        alert("Debes poner una asignatura");
+        return;
+    }
+
+    if (pass.length < 6) {
+        alert("Mínimo 6 caracteres");
+        return;
+    }
+
+    const usuario = {
+        nombre: document.getElementById('regNombre').value,
+        rol: rol,
+        asignatura: rol === "maestro" ? materia : null,
+        pass: pass
+    };
+
+    localStorage.setItem('usuarioRegistrado', JSON.stringify(usuario));
+
+    alert("Registro exitoso");
+    window.location.href = "index.html";
+});
+</script>
+
+</body>
+</html>
